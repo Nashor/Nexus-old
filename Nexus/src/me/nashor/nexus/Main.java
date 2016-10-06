@@ -4,12 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import me.nashor.nexus.Nexus.Spread;
+
 
 public class Main {
 
    public static void main(String[] args) {
       Main main = new Main();
       main.test1();
+   }
+   
+   public void test3() {
+      Nexus nexus;
+      
+      nexus = new Nexus(50, 50, 50, 10, 25);
+      nexus.setSpread(Spread.Linear);
+      
+      System.out.println(nexus.influence(75, 50, 50));
    }
    
    public void test2() {
