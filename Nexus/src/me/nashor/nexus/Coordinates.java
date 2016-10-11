@@ -5,17 +5,17 @@ public class Coordinates implements Comparable<Coordinates> {
    /**
     * The x-coordinate of the Coordinates.
     */
-   final private int x;
+   final public int x;
    
    /**
     * The y-coordinate of the Coordinates.
     */
-   final private int y;
+   final public int y;
    
    /**
     * The z-coordinate of the Coordinates.
     */
-   final private int z;
+   final public int z;
    
    /**
     * The constructor for a set of x, y and z coordinates.
@@ -28,30 +28,6 @@ public class Coordinates implements Comparable<Coordinates> {
       this.x = x;
       this.y = y;
       this.z = z;
-   }
-   
-   /**
-    * Returns the x-coordinate.
-    * @return the x-coordinate
-    */
-   public int getX() {
-      return x;
-   }
-   
-   /**
-    * Returns the y-coordinate.
-    * @return the y-coordinate
-    */
-   public int getY() {
-      return y;
-   }
-   
-   /**
-    * Returns the z-coordinate.
-    * @return the z-coordinate
-    */
-   public int getZ() {
-      return z;
    }
    
    @Override
