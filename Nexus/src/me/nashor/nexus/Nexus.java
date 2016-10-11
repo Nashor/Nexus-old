@@ -60,19 +60,10 @@ public class Nexus {
    private Spread spread = Spread.Gaussian;
    
    /**
-    * The x-coordinate of the Nexus. This value can be changed by the move function.
+    * An object containing the x, y and z coordinates of the Nexus. This object specifies where in
+    * the Minecraft world the Nexus is located.
     */
-   private int x = 0;
-   
-   /**
-    * The y-coordinate of the Nexus. This value can be changed by the move function. 
-    */
-   private int y = 0;
-   
-   /** 
-    * The z-coordinate of the Nexus. This value can be changed by the move function.
-    */
-   private int z = 0;
+   private Coordinates coords;
    
    /** 
     * The power is equal to the influence at the origin of the Nexus. This means, when the distance
@@ -113,52 +104,34 @@ public class Nexus {
     * @param power the power of the Nexus
     * @param radius the radius of the Nexus
     */
-   public Nexus(int x, int y, int z, double power, double radius) {
-      move(x, y, z);
-      
+   public Nexus(Coordinates coords, double power, double radius) {
+      setCoords(coords);
       setPower(power);
       setRadius(radius);
    }
    
    /**
-    * Returns the x-coordinate of the Nexus.
-    * @return the x-coordinate of the Nexus
+    * Returns the coordinates of the Nexus.
+    * <p>
+    * From the coordinates, the x, y and z coordinate values may be retrieved.
+    * 
+    * @return the coordinates of the Nexus
     */
-   public int getX() {
-      return x;
+   public Coordinates getCoords() {
+      return coords;
    }
-   
-   /**
-    * Returns the y-coordinate of the Nexus.
-    * @return the y-coordinate of the Nexus
-    */
-   public int getY() {
-      return y;
-   }
-   
-   /**
-    * Returns the z-coordinate of the Nexus.
-    * @return the z-coordinate of the Nexus
-    */
-   public int getZ() {
-      return z;
-   }
-   
+
    /**
     * Sets the coordinates of the Nexus, allowing the location to be changed.
     * <p>
     * It is possible for Nexus to be moved within the Minecraft world. This function allows for the
-    * the Nexus to change coordinates in such a case. This function may have to be changed when
-    * Nexus are stored in an ordered fashion.
+    * Nexus to change coordinates in such a case. A new Coordinates object must be instantiated as
+    * all fields in the Coordinate class are final.
     * 
-    * @param newX the new x-coordinate of the Nexus
-    * @param newY the new y-coordinate of the Nexus
-    * @param newZ the new z-coordinate of the Nexus
+    * @param coords the new coordinates of the Nexus
     */
-   public void move(int newX, int newY, int newZ) {
-      x = newX;
-      y = newY;
-      z = newZ;
+   public void setCoords(Coordinates coords) {
+      this.coords = coords;
    }
    
    /**
@@ -243,31 +216,32 @@ public class Nexus {
     * The distance calculation differs for each Shape the Nexus may take. For Chunk and Cylinder
     * shaped Nexus, the y-coordinate of the point is not taken into account.
     * 
-    * @param x the x-coordinate of the point
-    * @param y the y-coordinate of the point
-    * @param z the z-coordinate of the point
+    * @param coords the coordinates of the point
     * @return the distance from the point to the Nexus
     */
-   public double distance(int x, int y, int z) {
+   public double distance(Coordinates coords) {
+      int y;
       int dX, dY, dZ;
+      
+      y = coords.y;
       
       switch (shape) {
       case Chunk:
-         y = this.y;
+         y = this.coords.y;
          // Fall through
       case Cube:
-         dX = Math.abs(this.x - x);
-         dY = Math.abs(this.y - y);
-         dZ = Math.abs(this.z - z);
-         return dX > dY ? (dX > dZ ? x : dZ) : (dY > dZ ? dY : dZ);
+         dX = Math.abs(this.coords.x - coords.x);
+         dY = Math.abs(this.coords.y - y);
+         dZ = Math.abs(this.coords.y - coords.z);
+         return dX > dY ? (dX > dZ ? dX : dZ) : (dY > dZ ? dY : dZ);
       case Cylinder:
-         y = this.y;
+         y = this.coords.y;
          // Fall through
       default:
       //case Sphere:
-         dX = this.x - x;
-         dY = this.y - y;
-         dZ = this.z - z;
+         dX = this.coords.x - coords.x;
+         dY = this.coords.y - y;
+         dZ = this.coords.z - coords.z;
          return Math.sqrt(dX*dX + dY*dY + dZ*dZ);
       }
    }
@@ -280,14 +254,12 @@ public class Nexus {
     * the specified point is the one which protects it.
     * This calculation differs for each Spread the Nexus may take.
     * 
-    * @param x the x-coordinate of the point
-    * @param y the y-coordinate of the point
-    * @param z the z-coordinate of the point
+    * @param coords the coordinates of the point
     * @return the influence of the Nexus at the point
     */
-   public double influence(int x, int y, int z) {
+   public double influence(Coordinates coords) {
       double dist;
-      dist = distance(x, y, z); 
+      dist = distance(coords); 
       
       switch (spread) {
       case Linear:
@@ -295,14 +267,15 @@ public class Nexus {
       case Solid:
          return power;
       default:
-      //case Gaussian
+      //case Gaussian:
          return power * Math.exp(dist*dist * -(1. / (diffuse*diffuse)));
       }
    }
    
    @Override
    public String toString() {
-      return String.format("{%d, %d, %d} P=%f, R=%f", x, y, z, power, radius);
+      return String.format("{%d, %d, %d} P=%f, R=%f, D=%f, S=%f", 
+            coords.x, coords.x, coords.x, power, radius, diffuse, slope);
    }
 
 }

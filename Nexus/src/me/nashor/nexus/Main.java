@@ -3,6 +3,8 @@ package me.nashor.nexus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import me.nashor.nexus.Nexus.Spread;
 
@@ -11,16 +13,27 @@ public class Main {
 
    public static void main(String[] args) {
       Main main = new Main();
-      main.test1();
+      main.test4();
+   }
+   
+   public void test4() {
+      SortedSet<Coordinates> set = new TreeSet<Coordinates>();
+      set.add(new Coordinates(45, 64, 72));
+      set.add(new Coordinates(99, 11, -47));
+      set.add(new Coordinates(-8, 63, 249));
+      
+      for (Coordinates coords : set) {
+         System.out.println(coords);
+      }
    }
    
    public void test3() {
       Nexus nexus;
       
-      nexus = new Nexus(50, 50, 50, 10, 25);
+      nexus = new Nexus(new Coordinates(50, 50, 50), 10, 25);
       nexus.setSpread(Spread.Linear);
       
-      System.out.println(nexus.influence(75, 50, 50));
+      System.out.println(nexus.influence(new Coordinates(75, 50, 50)));
    }
    
    public void test2() {
@@ -30,9 +43,9 @@ public class Main {
       x = -3647;
       y = 101;
       z = 1177;
-      nexus = new Nexus(-3637, 245, 467, 67, 238);
+      nexus = new Nexus(new Coordinates(-3637, 245, 467), 67, 238);
       
-      System.out.println(nexus.influence(x, y, z));
+      System.out.println(nexus.influence(new Coordinates(x, y, z)));
    }
    
    public void test1() {
@@ -53,7 +66,7 @@ public class Main {
          rPower = rand.nextInt(80 + 1) + 20;
          rRadius = rand.nextInt(300 + 1) + 5;
          
-         nexuz.add(new Nexus(rX, rY, rZ, rPower, rRadius));
+         nexuz.add(new Nexus(new Coordinates(rX, rY, rZ), rPower, rRadius));
       }
       
       rX = rand.nextInt(WORLD_LENGTH * 2 + 1) - WORLD_LENGTH;
@@ -68,7 +81,7 @@ public class Main {
       
       startTime = System.currentTimeMillis();
       for (Nexus nexus : nexuz) {
-         inf = nexus.influence(rX, rY, rZ);
+         inf = nexus.influence(new Coordinates(rX, rY, rZ));
          if (inf > highestInf) {
             highestInf = inf;
             highestInfNexus = nexus;
@@ -82,7 +95,7 @@ public class Main {
       System.out.println(String.format("Point: {%d, %d, %d}", rX, rY, rZ));
       System.out.println(String.format("Nexus: %s", highestInfNexus));
       if (highestInfNexus != null)
-         System.out.println(String.format("Distance: %s", highestInfNexus.distance(rX, rY, rZ)));
+         System.out.println(String.format("Distance: %s", highestInfNexus.distance(new Coordinates(rX, rY, rZ))));
    }
 
 }
