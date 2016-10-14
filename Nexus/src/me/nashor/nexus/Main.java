@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import me.nashor.nexus.Nexus.Shape;
 import me.nashor.nexus.Nexus.Spread;
 
 
@@ -13,7 +14,29 @@ public class Main {
 
    public static void main(String[] args) {
       Main main = new Main();
-      main.test4();
+      //main.test4();
+      
+      Nexus nexus = new Nexus(new Coordinates(23, 0, 25), 10, 20);
+      nexus.setShape(Shape.Chunk);
+      
+      double dist = nexus.distance(new Coordinates(23, 0, 3));
+      System.out.println(dist);
+      double inf = nexus.influence(new Coordinates(23, 0, 3));
+      System.out.println(inf);
+   }
+   
+   public double[] simRange(int start, int stop) {
+      start *= 10;
+      stop *= 10;
+      
+      int i = 0;
+      double range[] = new double[stop - start + 1];
+      
+      for (i = 0; i <= stop - start; i ++) {
+         range[i] = (start + i) / 10.;
+      }
+      
+      return range;
    }
    
    public void test4() {

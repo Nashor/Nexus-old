@@ -232,7 +232,7 @@ public class Nexus {
       case Cube:
          dX = Math.abs(this.coords.x - coords.x);
          dY = Math.abs(this.coords.y - y);
-         dZ = Math.abs(this.coords.y - coords.z);
+         dZ = Math.abs(this.coords.z - coords.z);
          return dX > dY ? (dX > dZ ? dX : dZ) : (dY > dZ ? dY : dZ);
       case Cylinder:
          y = this.coords.y;
@@ -265,7 +265,7 @@ public class Nexus {
       case Linear:
          return power - dist * slope;
       case Solid:
-         return power;
+         return dist <= radius ? power : 0;
       default:
       //case Gaussian:
          return power * Math.exp(dist*dist * -(1. / (diffuse*diffuse)));
